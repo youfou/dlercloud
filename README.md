@@ -20,7 +20,7 @@ pip3 install -U dlercloud
 
 ## 如何使用
 
-DlerCloud 在其 Telegram 频道中提供了 API 的简要说明： 
+DlerCloud 在其 Telegram 频道中提供了 API 的简要说明:
 https://t.me/dlercloud_news/1113
 
 本 Python 模块按照上述说明进行构建。

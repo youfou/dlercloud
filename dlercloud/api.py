@@ -9,17 +9,17 @@ from .models import SSNode, V2Node
 
 
 class DlerCloudAPI:
-    def __init__(self, access_token=None, domain='dlercloud.co'):
+    def __init__(self, access_token=None, host='dlercloud.co'):
         """
         Python wrapper for DlerCloud API
 
         :param access_token: if you have cached access token, fill it here
-        :param domain: if the default domain is inaccessible, try another
+        :param host: if the default domain is inaccessible, try another
         """
         self.access_token = access_token
         self.user_id = None
 
-        self.host = domain
+        self.host = host
         self.base_url = 'https://{}/api/v1/'.format(self.host)
 
         self._sess = requests.Session()
