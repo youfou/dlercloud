@@ -15,7 +15,7 @@ class Node:
 
         :param _raw: raw json dict parsed from api response
         """
-        self._raw = _raw
+        self._raw: dict = _raw
 
         self.id = None
         self.name = None
@@ -76,11 +76,15 @@ class V2Node(Node):
             ('alter_id', 'alterId'),
             'network',
             ('ws_headers', 'ws-headers'),
+            'tls',
+            'host',
         )
 
         self.uuid = None
         self.alter_id = None
         self.network = None
         self.ws_headers = None
+        self.tls = None
+        self.host = None
 
         super(V2Node, self).__init__(_raw)

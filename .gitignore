@@ -198,5 +198,5 @@ ENV/
 
 # Rope project settings
 .ropeproject
-/test.py
 *.paw
+/tests/account.json
