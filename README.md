@@ -57,7 +57,7 @@ api.login('your@email.com', 'YoUr*PasSwoRD')
 
 # 例: 使用 SSNode 节点信息，创建一条 Surge 节点配置
 
-# 请求 /managed/v1/node_ss, 获得 ss 节点列表
+# 获得 ss 节点列表
 nodes = api.nodes.ss()
 # [<SSNode: 节点 1>, <SSNode: 节点 2>, <SSNode: 节点 3>, ...]
 
