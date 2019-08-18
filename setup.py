@@ -19,7 +19,7 @@ with open('README.md', 'r') as fp:
 
 setuptools.setup(
     name='dlercloud',
-    version='0.0.6',
+    version='0.0.7',
     author='Youfou',
     author_email='youfouzz@gmail.com',
     description='A Python Wrapper for DlerCloud API',

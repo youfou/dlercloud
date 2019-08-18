@@ -4,7 +4,7 @@
 
 ## 这是什么
 
-这是一个可用于调用 DlerCloud API 的非官方 Python 模块。
+这是一个可用于调用 [DlerCloud](https://dlercloud.co/auth/register?affid=29731) API 的非官方 Python 模块。
 
 你可以用它实现自动节点筛选和配置更新等操作。
 
@@ -20,10 +20,9 @@ pip3 install -U dlercloud
 
 ## 如何使用
 
-DlerCloud 在其 Telegram 频道中提供了 API 的简要说明:
-https://t.me/dlercloud_news/1113
+DlerCloud 在其 [Telegram 频道](https://t.me/dlercloud_news/1113) 中提供了 API 的简要说明。
 
-本 Python 模块按照上述说明进行构建。
+本 Python 模块按照该说明进行构建。
 
 | API                       | URL                      | `DlerCloudAPI()`            |
 | ------------------------- | ------------------------ | ------------------------- |
