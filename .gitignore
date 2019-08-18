@@ -199,3 +199,4 @@ ENV/
 # Rope project settings
 .ropeproject
 /test.py
+*.paw

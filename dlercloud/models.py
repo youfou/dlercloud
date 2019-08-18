@@ -6,7 +6,6 @@ class Node:
         'server',
         'port',
         'cipher',
-        'more',
         ('proxy_group', 'proxy group')
     )
 
@@ -24,7 +23,6 @@ class Node:
         self.server = None
         self.port = None
         self.cipher = None
-        self.more = None
         self.proxy_group = None
 
         self._parse_from_raw()
@@ -53,6 +51,7 @@ class SSNode(Node):
             'password',
             'advanced',
             'udp',
+            'more',
             'group',
         )
 

@@ -1,3 +1,4 @@
+import inspect
 import weakref
 from urllib.parse import urljoin
 
@@ -19,18 +20,9 @@ class DlerCloudAPI:
         self.user_id = None
 
         self.host = domain
-        self.base_url = 'https://{}'.format(self.host)
+        self.base_url = 'https://{}/api/v1/'.format(self.host)
 
         self._sess = requests.Session()
-
-    @staticmethod
-    def __object_hook(obj: dict):
-        for k, v in obj.items():
-            if v == 'true':
-                obj[k] = True
-            elif v == 'false':
-                obj[k] = False
-        return obj
 
     def _request(self, path, data=None, **kwargs):
         data = data or dict()
@@ -39,9 +31,10 @@ class DlerCloudAPI:
         url = urljoin(self.base_url, path)
         resp = self._sess.post(url, data=data, **kwargs)
         resp.raise_for_status()
-        resp_json = resp.json(object_hook=self.__object_hook)
-        if resp_json.get('ret') == 0:
-            raise ResponseError(resp_json.get('msg'))
+        resp_json = resp.json()
+        ret_code = int(resp_json.get('ret'))
+        if ret_code < 200 or ret_code >= 300:
+            raise ResponseError('[{}] {}'.format(ret_code, resp_json.get('msg')))
         return resp_json.get('data')
 
     def login(self, email, password):
@@ -51,9 +44,14 @@ class DlerCloudAPI:
         :param email: your login email
         :param password: your login password
         """
-        data = self._request('/managed/v1/login', dict(email=email, passwd=password))
+        data = self._request('login', dict(email=email, passwd=password))
         self.access_token = data['token']
         self.user_id = data['user_id']
+        return self.access_token
+
+    @property
+    def nodes(self):
+        return Nodes(weakref.proxy(self))
 
     @property
     def managed(self):
@@ -65,66 +63,52 @@ class DlerCloudAPI:
 
 
 # noinspection PyProtectedMember
-def _get_nodes(self, node_api, parser):
-    data = self._api._request(self._path.format(node_api))
-    nodes = list()
-    for node in data:
-        nodes.append(parser(node))
-    return nodes
-
-
-# noinspection PyProtectedMember
-def _get(self, tail):
-    return self._api._request(self._path.format(tail))
-
-
-# noinspection PyProtectedMember
-class Managed:
-    _path = '/managed/v1/{}'
-
+class Category:
     def __init__(self, _api: DlerCloudAPI):
         self._api = _api
+        self._category_name = self.__class__.__name__.lower() + '/'
 
-    def node_ss(self):
-        return _get_nodes(self, 'node_ss', SSNode)
+    def _request(self):
+        return self._api._request(urljoin(self._category_name, inspect.stack()[2][3]))
 
-    def node_v2(self):
-        return _get_nodes(self, 'node_v2', V2Node)
+    def _get(self):
+        return self._request()
 
+    def _get_nodes(self, node_type):
+        nodes = list()
+        for node in self._request():
+            nodes.append(node_type(node))
+        return nodes
+
+
+class Nodes(Category):
+    def ss(self):
+        return self._get_nodes(SSNode)
+
+    def v2ray(self):
+        return self._get_nodes(V2Node)
+
+
+class Managed(Category):
     def clash_ss(self):
-        return self._api._request(self._path.format('clash_ss'))
+        return self._get()
 
     def clash_v2(self):
-        return self._api._request(self._path.format('clash_v2'))
+        return self._get()
 
 
-# noinspection PyProtectedMember
-class Subscribe:
-    _path = '/subscribe/v1/{}'
+class Subscribe(Category):
+    def ss(self):
+        return self._get()
 
-    def __init__(self, _api: DlerCloudAPI):
-        self._api = _api
+    def ssd(self):
+        return self._get()
 
-    def node_ss(self):
-        return _get_nodes(self, 'node_ss', SSNode)
+    def ssr(self):
+        return self._get()
 
-    def node_v2(self):
-        return _get_nodes(self, 'node_v2', V2Node)
+    def av2(self):
+        return self._get()
 
-    def sub_ss(self):
-        return _get(self, 'sub_ss')
-
-    def sub_ssonly(self):
-        return _get(self, 'sub_ssonly')
-
-    def sub_ssd(self):
-        return _get(self, 'sub_ssd')
-
-    def sub_ssr(self):
-        return _get(self, 'sub_ssr')
-
-    def sub_av2(self):
-        return _get(self, 'sub_av2')
-
-    def sub_qv2(self):
-        return _get(self, 'sub_qv2')
+    def qv2(self):
+        return self._get()

@@ -5,13 +5,12 @@ with open('README.md', 'r') as fp:
 
 setuptools.setup(
     name='dlercloud',
-    version='0.0.2',
+    version='0.0.3',
     author='Youfou',
     author_email='youfouzz@gmail.com',
     description='A Python Wrapper for DlerCloud API',
     keywords=[
         'DlerCloud',
-        '墙洞'
     ],
     long_description=long_description,
     long_description_content_type='text/markdown',
