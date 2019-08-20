@@ -36,6 +36,7 @@ DlerCloud 在其 [Telegram 频道](https://t.me/dlercloud_news/1113) 中提供�
 | SSR 订阅地址              | /api/v1/subscribe/ssr    | `.subscribe.ssr()`        |
 | V2RayN 的订阅地址         | /api/v1/subscribe/av2    | `.subscribe.av2()`        |
 | Quantumult V2ray 订阅地址 | /api/v1/subscribe/qv2    | `.subscribe.qv2()`        |
+| 使当前 access token 失效 | /api/v1/logout | `.logout()` |
 
 ## 示例代码
 

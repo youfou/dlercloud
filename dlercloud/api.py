@@ -26,7 +26,7 @@ class DlerCloudAPI:
 
     def _request(self, path, data=None, **kwargs):
         data = data or dict()
-        if self.access_token is not None:
+        if self.access_token and path not in ('login', 'logout'):
             data.update(access_token=self.access_token)
         url = urljoin(self.base_url, path)
         resp = self._sess.post(url, data=data, **kwargs)
@@ -41,13 +41,31 @@ class DlerCloudAPI:
         """
         log in via email and password, and get access token
 
-        :param email: your login email
-        :param password: your login password
+        :param email: your account email
+        :param password: your account password
         """
         data = self._request('login', dict(email=email, passwd=password))
         self.access_token = data['token']
         self.user_id = data['user_id']
         return self.access_token
+
+    def logout(self, email=None, password=None):
+        """
+        log out, to abandon current access token.
+        if email or password is not provided, current access token will be used as payload.
+
+        :param email: your account email
+        :param password: your account password
+        """
+
+        if email and password:
+            self._request('logout', dict(email=email, passwd=password))
+            self.access_token = None
+        elif self.access_token:
+            self._request('logout', dict(access_token=self.access_token))
+            self.access_token = None
+        else:
+            raise ValueError('email and password, or access token (.access_token) is needed at least')
 
     @property
     def nodes(self):

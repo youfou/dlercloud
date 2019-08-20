@@ -200,3 +200,4 @@ ENV/
 .ropeproject
 *.paw
 /tests/account.json
+.pytest_cache

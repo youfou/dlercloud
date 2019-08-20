@@ -8,13 +8,16 @@ from dlercloud.exceptions import ResponseError
 from dlercloud.models import Node
 
 
-@pytest.fixture('class')
-def api() -> DlerCloudAPI:
+@pytest.fixture('session')
+def account() -> dict:
     account_json = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'account.json')
-
     with open(account_json) as fp:
         account = json.load(fp)
+    return account
 
+
+@pytest.fixture('session')
+def api(account) -> DlerCloudAPI:
     i = DlerCloudAPI()
     i.login(account['email'], account['password'])
     return i
@@ -76,6 +79,19 @@ def test_failed_login():
     api = DlerCloudAPI()
     with pytest.raises(ResponseError):
         api.login('wrong@email.com', 'wrong password')
+
+
+def test_logout(api: DlerCloudAPI, account: dict):
+    api.logout()
+    with pytest.raises(ResponseError):
+        api.managed.clash_ss()
+
+    api.logout(account['email'], account['password'])
+
+    with pytest.raises(ValueError):
+        api.logout()
+
+    api.login(account['email'], account['password'])
 
 
 if __name__ == '__main__':
